@@ -24,7 +24,7 @@ class Middleware
     function next()
     {
         return function($request, $response) {
-            return ($next = next($this->stack)) ? call_user_func($next, $request, $response, $this->next()) : $response;
+            return ($next = next($this->stack)) ? $next($request, $response, $this->next()) : $response;
         };
     }
 
@@ -35,6 +35,6 @@ class Middleware
      */
     function __invoke($request, $response)
     {
-        return !$this->stack ? $response : call_user_func(reset($this->stack), $request, $response, $this->next());
+        return !$this->stack ? $response : (reset($this->stack))($request, $response, $this->next());
     }
 }
