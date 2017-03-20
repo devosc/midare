@@ -1,0 +1,20 @@
+{
+    "name": "devosc/midare",
+    "description": "Demo middleware using php arrays",
+    "keywords": [],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gregory Baboolal",
+            "email": "devosc@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "./src"
+        }
+    }
+}
