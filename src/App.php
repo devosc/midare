@@ -8,7 +8,7 @@ class App
     /**
      * @var array
      */
-    static $config = [];
+    protected static $config = [];
 
     /**
      * @param array $config
@@ -24,18 +24,7 @@ class App
      */
     static function config($name = null)
     {
-        if (null === $name) {
-            return static::$config;
-        }
-
-        $names = explode('.', $name);
-        $value = static::$config[array_shift($names)];
-
-        foreach($names as $name) {
-             $value = $value[$name];
-        }
-
-        return $value;
+        return null === $name ? static::$config : static::$config[$name];
     }
 
     /**
@@ -44,7 +33,7 @@ class App
      */
     static function layout($content)
     {
-        return static::render(static::config('templates.layout'), ['content' => $content]);
+        return static::render(static::config('templates')['layout'], ['content' => $content]);
     }
 
     /**
@@ -81,7 +70,7 @@ class App
     {
         return [
             'args' => $args,
-            'data' => $data ?: [],
+            'data' => $data,
             'method' => $server['REQUEST_METHOD'],
             'session' => [],
             'user' => [],
@@ -112,13 +101,13 @@ class App
     {
         $stack = [
 
-            'middleware' => function($request, $response, $next) {
-
+            'middleware' => function($request, $response, $next)
+            {
                 return $next($request, $request['middleware']($request, $response));
             },
 
-            'prepare/response' => function($request, $response, $next) {
-
+            'prepare/response' => function($request, $response, $next)
+            {
                 empty($response['version']) && $response['version'] = $request['version'];
 
                 (empty($response['status']) || 200 == $response['status']) && $response['reason'] = 'OK';
@@ -126,7 +115,8 @@ class App
                 return $next($request, $response);
             },
 
-            'send/response' => function($request, $response) {
+            'send/response' => function($request, $response)
+            {
                 if (!empty($response['headers'])) {
                     foreach($response['headers'] as $name => $value) {
                         header($name . ': ' . (is_array($value) ? implode(', ', $value) : $value));

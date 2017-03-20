@@ -20,7 +20,7 @@ $stack = [
 
     'logout' => function($request, $response, $next)
     {
-        if ('POST' == $request['method'] && isset($request['data']['logout'])) {
+        if ('GET' == $request['method'] && isset($request['args']['logout'])) {
             $request['session']['user'] = null;
             return App::redirect('/');
         }
@@ -30,7 +30,6 @@ $stack = [
 
     'login' => function($request, $response, $next)
     {
-
         if (!empty($request['user'])) {
             return $next($request, $response);
         }
@@ -51,7 +50,7 @@ $stack = [
         }
 
         $response['body'] = App::layout(
-            App::render(App::config('templates.login'), ['errors' => $errors, 'form' => $form])
+            App::render(App::config('templates')['login'], ['errors' => $errors, 'form' => $form])
         );
 
         return $response;
@@ -62,7 +61,7 @@ $stack = [
         $user = $request['user'];
 
         $response['body'] = App::layout(
-            App::render(App::config('templates.welcome'), ['user' => $user])
+            App::render(App::config('templates')['welcome'], ['user' => $user])
         );
 
         return $next($request, $response);

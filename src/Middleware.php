@@ -21,7 +21,7 @@ class Middleware
     /**
      * @return \Closure
      */
-    function next()
+    protected function next()
     {
         return function($request, $response) {
             return ($next = next($this->stack)) ? $next($request, $response, $this->next()) : $response;
